@@ -28,6 +28,10 @@ const AMBIENT = [
     opacity: 0.32,
     duration: '17s',
     delay: '0s',
+    // Deriva lenta, con un periodo que no es múltiplo del balanceo: las dos
+    // animaciones se desfasan sin repetirse nunca igual.
+    driftDuration: '29s',
+    driftDelay: '-6s',
   },
   {
     uid: 'amb-b',
@@ -39,6 +43,8 @@ const AMBIENT = [
     opacity: 0.26,
     duration: '21s',
     delay: '-4s',
+    driftDuration: '37s',
+    driftDelay: '-13s',
   },
   {
     uid: 'amb-c',
@@ -50,6 +56,8 @@ const AMBIENT = [
     opacity: 0.22,
     duration: '13s',
     delay: '-7s',
+    driftDuration: '23s',
+    driftDelay: '-3s',
   },
 ] as const;
 
@@ -95,21 +103,28 @@ export default function Scene({ children }: SceneProps) {
   const ambient = useMemo(
     () =>
       AMBIENT.map((a) => (
+        // Dos capas con animaciones distintas: la de fuera deriva y respira,
+        // la de dentro se balancea. Al tener periodos que no encajan, el
+        // movimiento resultante no se lee como un bucle.
         <div
           key={a.uid}
           className={styles.ambient}
           style={
             {
               ...a.style,
-              '--r': a.rotate,
-              '--dur': a.duration,
-              '--delay': a.delay,
+              '--drift-dur': a.driftDuration,
+              '--drift-delay': a.driftDelay,
               filter: `blur(${a.blur})`,
               opacity: a.opacity,
             } as CssVars
           }
         >
-          <Flower seed={a.seed} uid={a.uid} palette={a.palette} detail="high" discSeeds={160} />
+          <div
+            className={styles.ambientInner}
+            style={{ '--r': a.rotate, '--dur': a.duration, '--delay': a.delay } as CssVars}
+          >
+            <Flower seed={a.seed} uid={a.uid} palette={a.palette} detail="high" discSeeds={160} />
+          </div>
         </div>
       )),
     [],

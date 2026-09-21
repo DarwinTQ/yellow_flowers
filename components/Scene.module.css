@@ -28,21 +28,62 @@
   pointer-events: none;
 }
 
+/* Capa externa: deriva muy lenta y una respiración de escala casi imperceptible.
+   Es lo que quita la sensación de que la flor está clavada en su sitio. */
 .ambient {
   position: absolute;
+  will-change: transform;
+  animation: ambientDrift var(--drift-dur) ease-in-out infinite;
+  animation-delay: var(--drift-delay);
+}
+
+/* Capa interna: el balanceo alrededor del propio eje de la flor. */
+.ambientInner {
   transform: rotate(var(--r));
   transform-origin: 50% 50%;
+  will-change: transform;
   animation: ambientSway var(--dur) ease-in-out infinite;
   animation-delay: var(--delay);
 }
 
+/* Los pasos son asimétricos a propósito: con solo 0% / 50% / 100% el vaivén
+   suena a metrónomo, y lo que se busca es aire moviendo un tallo. */
 @keyframes ambientSway {
-  0%,
-  100% {
-    transform: rotate(calc(var(--r) - 1.4deg));
+  0% {
+    transform: rotate(calc(var(--r) - 2.6deg));
   }
-  50% {
-    transform: rotate(calc(var(--r) + 1.4deg));
+  27% {
+    transform: rotate(calc(var(--r) + 0.9deg));
+  }
+  48% {
+    transform: rotate(calc(var(--r) + 2.9deg));
+  }
+  71% {
+    transform: rotate(calc(var(--r) - 0.4deg));
+  }
+  88% {
+    transform: rotate(calc(var(--r) - 2.1deg));
+  }
+  100% {
+    transform: rotate(calc(var(--r) - 2.6deg));
+  }
+}
+
+@keyframes ambientDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  31% {
+    transform: translate3d(1.1vmin, -0.8vmin, 0) scale(1.016);
+  }
+  58% {
+    transform: translate3d(0.3vmin, 0.9vmin, 0) scale(0.994);
+  }
+  79% {
+    transform: translate3d(-0.9vmin, 0.2vmin, 0) scale(1.007);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
@@ -290,7 +331,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .plant,
-  .ambient {
+  .ambient,
+  .ambientInner {
     animation: none;
   }
 
