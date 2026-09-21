@@ -186,6 +186,17 @@ export default function Scene({ children }: SceneProps) {
       </div>
 
       <PetalRain burst={burst} />
+
+      {/* Firma: fuera de `.content` para no entrar en el rect que decide dónde
+          se plantan las flores, y por encima de la lluvia de pétalos. */}
+      <a
+        className={styles.credit}
+        href="https://github.com/DarwinTQ"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        By Darwinn :)
+      </a>
     </div>
   );
 }

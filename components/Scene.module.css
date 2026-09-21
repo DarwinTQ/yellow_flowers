@@ -194,10 +194,47 @@
   color: var(--ink);
 }
 
+/* ---- Firma ---- */
+
+.credit {
+  position: fixed;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  /* Por encima de la lluvia de pétalos (z-index 40), que es la capa más alta. */
+  z-index: 50;
+  padding: 0.35rem 0.1rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-mute);
+  text-decoration: none;
+  transition:
+    color 220ms ease,
+    opacity 220ms ease;
+  opacity: 0.75;
+}
+
+.credit:hover {
+  color: var(--ink);
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--hair);
+}
+
+.credit:focus-visible {
+  outline: 2px solid var(--gold-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .plant,
   .ambient {
     animation: none;
+  }
+
+  .credit {
+    transition: none;
   }
 
   .btn {
