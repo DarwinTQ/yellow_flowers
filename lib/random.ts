@@ -41,6 +41,20 @@ export function createRng(seed: number): Rng {
   };
 }
 
+/**
+ * Redondeo numérico a 3 decimales.
+ *
+ * Imprescindible para cualquier número que acabe como atributo del SVG: las
+ * funciones trascendentales (`Math.sin`, `Math.cos`, `Math.sqrt`) no garantizan
+ * el mismo último bit entre el V8 de Node y el del navegador, así que un valor
+ * crudo como `77.21677102185117` puede llegar al cliente como `...119` y React
+ * lo reporta como error de hidratación. Redondeado, servidor y cliente
+ * coinciden siempre.
+ */
+export function r(value: number): number {
+  return Math.round(value * 1000) / 1000;
+}
+
 /** Redondeo corto para que los `path` del SVG no arrastren ruido decimal. */
 export function n(value: number): string {
   return (Math.round(value * 100) / 100).toString();

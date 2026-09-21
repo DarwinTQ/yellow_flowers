@@ -28,8 +28,9 @@ export default function Page() {
         <div className={styles.divider} aria-hidden="true" />
 
         <p className={styles.subtitle}>
-          Un día para celebrar la luz, el sol y las flores que iluminan el mundo. Plantá una, o
-          hacé llover pétalos sobre toda la pantalla.
+          Dicen que las flores amarillas son promesas de sol y días felices. Te mando unas
+          cuantas, porque cada una lleva un pedacito del cariño que te tengo. Diviértete plantando
+          flores o haciendo llover pétalos. 🌼✨
         </p>
 
         <div className={styles.mascot}>

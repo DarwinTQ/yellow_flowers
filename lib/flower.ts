@@ -1,4 +1,4 @@
-import { createRng, mixHex, n } from './random';
+import { createRng, mixHex, n, r } from './random';
 
 /**
  * Geometría botánica de una flor.
@@ -290,18 +290,22 @@ function buildDiscSeeds(count: number, radius: number, palette: FlowerPalette): 
   const golden = Math.PI * (3 - Math.sqrt(5));
   const seeds: DiscSeed[] = [];
   for (let i = 0; i < count; i++) {
-    const t = Math.sqrt((i + 0.6) / count);
-    const r = t * radius * 0.92;
+    // `t` se redondea antes de derivar nada de él: así tamaño, color y opacidad
+    // salen de un valor idéntico en servidor y cliente.
+    const t = r(Math.sqrt((i + 0.6) / count));
+    const dist = t * radius * 0.92;
     const a = i * golden;
     const size = 0.55 + t * 1.5;
     seeds.push({
-      cx: HEAD_X + Math.cos(a) * r,
-      cy: HEAD_Y + Math.sin(a) * r,
-      rx: size * 1.3,
-      ry: size * 0.72,
-      angle: (a * 180) / Math.PI,
+      cx: r(HEAD_X + Math.cos(a) * dist),
+      cy: r(HEAD_Y + Math.sin(a) * dist),
+      rx: r(size * 1.3),
+      ry: r(size * 0.72),
+      // Normalizado a [0, 360): el ángulo áureo acumulado llega a valores de
+      // cinco cifras, donde el redondeo ya no basta para estabilizarlo.
+      angle: r((((a * 180) / Math.PI) % 360 + 360) % 360),
       fill: mixHex(palette.discInner, palette.discRim, Math.min(1, t * 1.15)),
-      opacity: 0.55 + t * 0.4,
+      opacity: r(0.55 + t * 0.4),
     });
   }
   return seeds;
