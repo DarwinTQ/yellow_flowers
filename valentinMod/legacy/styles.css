@@ -464,6 +464,116 @@ body {
     .content { padding: 20px; }
 }
 
+/* ===== Flores plantadas (botón "Plantar una flor") ===== */
+.planted-garden {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.planted-flower {
+    position: absolute;
+    width: 60px;
+    height: 120px;
+    margin-left: -30px;
+    transform: scale(var(--pf-scale, 1));
+    transform-origin: bottom center;
+}
+
+.pf-sway {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: bottom center;
+    animation: sway 4s ease-in-out infinite;
+}
+
+/* El tallo brota desde abajo */
+.planted-flower .stem {
+    animation: pfStem 0.42s ease-out backwards;
+}
+
+@keyframes pfStem {
+    from { transform: translateX(-50%) scaleY(0); }
+    to   { transform: translateX(-50%) scaleY(1); }
+}
+
+.planted-flower .stem,
+.planted-flower .leaf {
+    transform-origin: bottom center;
+}
+
+.planted-flower .leaf {
+    transform: translateX(-50%) rotate(var(--pf-leaf-rot, -30deg));
+    transform-origin: right center;
+    animation: pfLeaf 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) 0.22s backwards;
+}
+
+@keyframes pfLeaf {
+    from { transform: translateX(-50%) rotate(var(--pf-leaf-rot, -30deg)) scale(0); }
+    to   { transform: translateX(-50%) rotate(var(--pf-leaf-rot, -30deg)) scale(1); }
+}
+
+/* La corola se despliega con rebote elástico */
+.pf-head {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    transform-origin: 50% 0;
+    animation: pfBloom 0.42s cubic-bezier(0.34, 1.7, 0.5, 1) 0.26s backwards;
+}
+
+@keyframes pfBloom {
+    from { transform: scale(0) rotate(-35deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.planted-flower .petal {
+    background: radial-gradient(circle, #FFF59D, var(--pf-tone, #FFD700));
+}
+
+.planted-flower.pf-out {
+    animation: pfWither 0.45s ease-in forwards;
+}
+
+@keyframes pfWither {
+    to { transform: scale(calc(var(--pf-scale, 1) * 0.4)); opacity: 0; }
+}
+
+/* ===== Lluvia de pétalos (botón "Celebrar") ===== */
+.petal-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 15;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.rain-petal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: 0 1px 3px rgba(218, 165, 32, 0.25);
+    will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pf-sway { animation: none; }
+}
+
 .joker-float {
     font-size: 0.85rem;
     color: rgba(78, 52, 46, 0.6);
@@ -490,3 +600,4 @@ body {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
 }
+

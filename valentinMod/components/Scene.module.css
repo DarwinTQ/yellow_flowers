@@ -1,0 +1,223 @@
+.scene {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* ---- Capas de fondo ---- */
+
+/* Banda cálida que "asienta" las flores en un horizonte difuso. */
+.horizon {
+  position: fixed;
+  inset: auto 0 0 0;
+  height: 38vh;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(226, 205, 162, 0.5), rgba(226, 205, 162, 0));
+}
+
+/* Flores grandes fuera de foco: dan profundidad de campo sin robar atención. */
+.ambientLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ambient {
+  position: absolute;
+  transform: rotate(var(--r));
+  transform-origin: 50% 50%;
+  animation: ambientSway var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+@keyframes ambientSway {
+  0%,
+  100% {
+    transform: rotate(calc(var(--r) - 1.4deg));
+  }
+  50% {
+    transform: rotate(calc(var(--r) + 1.4deg));
+  }
+}
+
+/* ---- Jardín plantado ---- */
+
+.garden {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.plant {
+  position: absolute;
+  transform-origin: bottom center;
+  animation: sway var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
+  filter: drop-shadow(0 6px 10px rgba(96, 68, 20, 0.12));
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(calc(var(--amt) * -1));
+  }
+  50% {
+    transform: rotate(var(--amt));
+  }
+}
+
+/* ---- Contenido ---- */
+
+.content {
+  position: relative;
+  z-index: 10;
+  width: min(100%, 44rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  --btn-border: var(--hair);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.6rem;
+  border: 1px solid var(--btn-border);
+  border-radius: 999px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform 260ms cubic-bezier(0.34, 1.4, 0.64, 1),
+    box-shadow 260ms ease,
+    background-color 260ms ease,
+    border-color 260ms ease;
+}
+
+.btn svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.primary {
+  --btn-bg: var(--gold);
+  --btn-fg: #2A1D06;
+  --btn-border: transparent;
+  box-shadow: 0 8px 22px -10px rgba(190, 132, 20, 0.85);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.primary:hover {
+  box-shadow: 0 14px 30px -12px rgba(190, 132, 20, 0.95);
+}
+
+.ghost:hover {
+  border-color: rgba(31, 27, 22, 0.32);
+  background: rgba(31, 27, 22, 0.035);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--gold-deep);
+  outline-offset: 3px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 1.5rem;
+  margin-top: 1.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-mute);
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.metaVisible {
+  opacity: 1;
+}
+
+.count {
+  font-variant-numeric: tabular-nums;
+}
+
+.clear {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--ink-mute);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--hair);
+  cursor: pointer;
+  transition: color 200ms ease;
+}
+
+.clear:hover {
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plant,
+  .ambient {
+    animation: none;
+  }
+
+  .btn {
+    transition: none;
+  }
+
+  .btn:hover,
+  .btn:active {
+    transform: none;
+  }
+}
+
+@media (max-width: 30rem) {
+  .actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

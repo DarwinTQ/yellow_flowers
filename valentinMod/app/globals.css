@@ -1,0 +1,60 @@
+:root {
+  --paper: #faf6ee;
+  --ink: #1f1b16;
+  --ink-soft: #554c40;
+  --ink-mute: rgba(31, 27, 22, 0.56);
+  --hair: rgba(31, 27, 22, 0.16);
+  --gold: #e9a825;
+  --gold-deep: #b57c12;
+  --gold-soft: #f6d68a;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100svh;
+  overflow-x: hidden;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  color: var(--ink);
+  background-color: var(--paper);
+  /* Dos focos cálidos muy suaves: luz que entra por arriba y rebota abajo. */
+  background-image:
+    radial-gradient(130% 85% at 50% -15%, #fffcf2 0%, rgba(255, 252, 242, 0) 58%),
+    radial-gradient(100% 62% at 50% 112%, #f4e9d2 0%, rgba(244, 233, 210, 0) 72%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Grano de papel: apenas perceptible, quita el aspecto plano del degradado. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--gold-soft);
+  color: var(--ink);
+}

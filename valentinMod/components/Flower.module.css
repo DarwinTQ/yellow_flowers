@@ -1,0 +1,117 @@
+/*
+ * Las animaciones pivotan sobre dos puntos fijos del viewBox (ver lib/flower.ts):
+ *   (100, 100) -> centro de la corola
+ *   (100, 340) -> base del tallo
+ * Con `transform-box: view-box` y un viewBox que arranca en 0 0, esos valores
+ * se pueden escribir directamente como `transform-origin` en píxeles.
+ */
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.stem,
+.leaf,
+.petal,
+.disc {
+  transform-box: view-box;
+}
+
+.stem {
+  transform-origin: 100px 340px;
+}
+
+.leaf {
+  transform-origin: var(--ox) var(--oy);
+  transform: rotate(var(--a));
+}
+
+.petal {
+  transform-origin: 100px 100px;
+  transform: rotate(var(--a));
+}
+
+.disc {
+  transform-origin: 100px 100px;
+}
+
+/* ---- Florecimiento (~0.8s): brota el tallo, se despliegan los pétalos ---- */
+
+.bloom .stem {
+  animation: stemGrow 420ms cubic-bezier(0.22, 0.92, 0.32, 1) backwards;
+}
+
+.bloom .leaf {
+  animation: leafOut 380ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  animation-delay: var(--d);
+}
+
+.bloom .petal {
+  animation: unfurl 420ms cubic-bezier(0.3, 1.5, 0.5, 1) backwards;
+  animation-delay: var(--d);
+}
+
+.bloom .disc {
+  animation: discOut 340ms cubic-bezier(0.34, 1.5, 0.5, 1) 380ms backwards;
+}
+
+@keyframes stemGrow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes leafOut {
+  from {
+    transform: rotate(var(--a)) scale(0);
+  }
+  to {
+    transform: rotate(var(--a)) scale(1);
+  }
+}
+
+/* El pétalo entra encogido y girado hacia atrás: se "desenrolla" al abrirse. */
+@keyframes unfurl {
+  from {
+    transform: rotate(calc(var(--a) - 24deg)) scale(0.05);
+  }
+  to {
+    transform: rotate(var(--a)) scale(1);
+  }
+}
+
+@keyframes discOut {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bloom .stem,
+  .bloom .leaf,
+  .bloom .petal,
+  .bloom .disc {
+    animation: fadeIn 260ms ease-out backwards;
+    animation-delay: 0ms;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
