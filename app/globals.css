@@ -54,6 +54,21 @@ button {
   color: inherit;
 }
 
+/* En móvil, al tocar cualquier control el navegador pinta encima un rectángulo
+   azul del sistema. Se quita aquí y cada control define su propio efecto de
+   pulsación, en la paleta cálida del resto de la página. */
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  /* Sin el retardo de ~300 ms que el navegador reserva para el doble toque. */
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 ::selection {
   background: var(--gold-soft);
   color: var(--ink);

@@ -27,6 +27,15 @@ export const metadata: Metadata = {
     locale: 'es_ES',
     type: 'website',
   },
+  icons: {
+    icon: [
+      { url: '/assets/images/favicon.ico', sizes: 'any' },
+      { url: '/assets/images/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/assets/images/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+    ],
+    apple: '/assets/images/apple-touch-icon.png',
+  },
+  manifest: '/assets/images/site.webmanifest',
 };
 
 export const viewport: Viewport = {

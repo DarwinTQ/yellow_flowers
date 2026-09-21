@@ -99,6 +99,11 @@
   --btn-bg: transparent;
   --btn-fg: var(--ink);
   --btn-border: var(--hair);
+  /* Color del destello de pulsación; cada variante lo redefine. */
+  --tap: rgba(246, 214, 138, 0.55);
+  position: relative;
+  /* Aísla el destello (z-index negativo) dentro del propio botón. */
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
@@ -126,28 +131,70 @@
   flex: none;
 }
 
+/* Destello cálido que se abre desde el centro al pulsar. Va en z-index -1:
+   queda por encima del fondo del botón pero por debajo del texto y el icono. */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 50%, var(--tap), rgba(246, 214, 138, 0) 70%);
+  opacity: 0;
+  transform: scale(0.4);
+  /* Entra rápido (ver `:active`) y se apaga despacio: el rastro al soltar es
+     lo que hace que el toque se sienta, sin el recuadro azul del sistema. */
+  transition:
+    opacity 560ms ease,
+    transform 560ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
 .primary {
   --btn-bg: var(--gold);
   --btn-fg: #2A1D06;
   --btn-border: transparent;
+  --tap: rgba(255, 249, 232, 0.8);
   box-shadow: 0 8px 22px -10px rgba(190, 132, 20, 0.85);
 }
 
-.btn:hover {
-  transform: translateY(-2px);
+.ghost {
+  --tap: rgba(233, 168, 37, 0.32);
 }
 
-.primary:hover {
-  box-shadow: 0 14px 30px -12px rgba(190, 132, 20, 0.95);
-}
+/* Solo en dispositivos con puntero real: en móvil el `:hover` se queda pegado
+   después de tocar y el botón se quedaría flotando. */
+@media (hover: hover) {
+  .btn:hover {
+    transform: translateY(-2px);
+  }
 
-.ghost:hover {
-  border-color: rgba(31, 27, 22, 0.32);
-  background: rgba(31, 27, 22, 0.035);
+  .primary:hover {
+    box-shadow: 0 14px 30px -12px rgba(190, 132, 20, 0.95);
+  }
+
+  .ghost:hover {
+    border-color: rgba(31, 27, 22, 0.32);
+    background: rgba(31, 27, 22, 0.035);
+  }
 }
 
 .btn:active {
-  transform: translateY(0) scale(0.985);
+  transform: translateY(0) scale(0.97);
+}
+
+.btn:active::after {
+  opacity: 1;
+  transform: scale(1);
+  transition-duration: 90ms;
+}
+
+/* Al pulsar, el botón principal se hunde: la sombra se recoge contra el papel. */
+.primary:active {
+  box-shadow: 0 3px 10px -8px rgba(190, 132, 20, 0.9);
+}
+
+.ghost:active {
+  border-color: rgba(181, 124, 18, 0.45);
 }
 
 .btn:focus-visible {
@@ -190,8 +237,15 @@
   transition: color 200ms ease;
 }
 
-.clear:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .clear:hover {
+    color: var(--ink);
+  }
+}
+
+.clear:active {
+  color: var(--gold-deep);
+  text-decoration-color: var(--gold);
 }
 
 /* ---- Firma ---- */
@@ -213,12 +267,19 @@
   opacity: 0.75;
 }
 
-.credit:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .credit:hover {
+    color: var(--ink);
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--hair);
+  }
+}
+
+.credit:active {
+  color: var(--gold-deep);
   opacity: 1;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-color: var(--hair);
 }
 
 .credit:focus-visible {
@@ -243,6 +304,17 @@
 
   .btn:hover,
   .btn:active {
+    transform: none;
+  }
+
+  /* El destello se mantiene —es la señal de que el toque se registró— pero
+     aparece y desaparece sin escalar. */
+  .btn::after {
+    transform: none;
+    transition: opacity 120ms ease;
+  }
+
+  .btn:active::after {
     transform: none;
   }
 }
